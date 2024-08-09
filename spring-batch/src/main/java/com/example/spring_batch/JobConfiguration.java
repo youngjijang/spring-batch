@@ -1,6 +1,7 @@
 package com.example.spring_batch;
 
 import org.springframework.batch.core.Job;
+import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.StepContribution;
 import org.springframework.batch.core.job.builder.JobBuilder;
@@ -30,6 +31,9 @@ public class JobConfiguration {
                     @Override
                     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
                         System.out.println("hello spring batch!!");
+
+                        JobParameters jobParameters = contribution.getStepExecution().getJobParameters();
+                        System.out.println(jobParameters.getString("name"));
                         return null;
                     }
                 }, transactionManager)
