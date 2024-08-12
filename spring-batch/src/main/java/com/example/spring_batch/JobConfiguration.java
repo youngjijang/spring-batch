@@ -5,7 +5,10 @@ import org.springframework.batch.core.JobExecutionListener;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.StepContribution;
+import org.springframework.batch.core.job.DefaultJobParametersValidator;
+import org.springframework.batch.core.job.builder.FlowBuilder;
 import org.springframework.batch.core.job.builder.JobBuilder;
+import org.springframework.batch.core.launch.support.RunIdIncrementer;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.core.step.builder.StepBuilder;
@@ -29,6 +32,17 @@ public class JobConfiguration {
 			.start(step)
 			.listener(jobExecutionListener)
 			.build();
+	}
+
+	public Job simpleJob(JobRepository jobRepository, Step step) {
+		return new JobBuilder("myJob", jobRepository)
+				.start(step)
+				.next(step)
+				.incrementer(new CustomJobParametersIncrementer()) /// JobParameter의 값을 자동 증가해주는 설정
+				.preventRestart() // Job의 재시작 방어 (Default true)
+				.validator(new CustomJobParametersValidator()) // JobParameter 검증
+				.listener(jobExecutionListener) // Job 라이프 사이클의 특정 시점에 콜백을 제공하는 listener 설정
+				.build(); // Job 생성
 	}
 
 	@Bean

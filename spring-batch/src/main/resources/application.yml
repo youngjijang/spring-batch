@@ -19,7 +19,7 @@ spring:
     jdbc:
       initialize-schema: ALWAYS
     job:
-      # enabled: false #job이 application load될때 자동실행되지 않도록 설정
+ #     enabled: false #job이 application load될때 자동실행되지 않도록 설정
       name: ${job.name:NONE} # 실행시킬 job을 arg로 전달받기. NONE은 임의의 String값이며 해당 Job이 없기때문에 어떤 Batch도 실행되지 않는다.
 
 ---
